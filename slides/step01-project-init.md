@@ -6,7 +6,7 @@ paginate: true
 
 # Step 1: 프로젝트 초기 설정
 
-**CNU26 Real Coding 2026 - Spring Boot Backend**
+**2026 RealCoding - Spring Boot Backend**
 
 브랜치: `main`
 

@@ -1,6 +1,6 @@
 # 강의 제작 워크플로우
 
-> 이 문서는 CNU26 Backend 강의 Step 을 새로 추가하는 전체 과정을 기록한 것입니다.
+> 이 문서는 2026 RealCoding Backend 강의 Step 을 새로 추가하는 전체 과정을 기록한 것입니다.
 > Step 17 (프론트엔드 연동 API) 제작 과정을 기준으로 작성되었습니다.
 
 ---
@@ -166,7 +166,7 @@ paginate: true
 # 제목
 ## 부제목
 
-**CNU26 Real Coding 2026**
+**2026 RealCoding**
 브랜치: `feature/xxx`
 
 ---

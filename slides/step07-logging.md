@@ -6,7 +6,7 @@ paginate: true
 
 # Step 7: 로깅 설정과 Logback 활용
 
-**CNU26 Real Coding 2026**
+**2026 RealCoding**
 
 브랜치: `web/logging`
 실습: `web/logging-practice`

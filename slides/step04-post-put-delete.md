@@ -6,7 +6,7 @@ paginate: true
 
 # Step 4: Post, Put, Delete 요청 처리
 
-**CNU26 Real Coding 2026 - Spring Boot Backend**
+**2026 RealCoding - Spring Boot Backend**
 
 브랜치: `web/post` | 실습: `web/post-practice`
 

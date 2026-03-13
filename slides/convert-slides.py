@@ -339,7 +339,7 @@ def generate_index(files: list[tuple[str, str, str]]) -> str:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CNU26 Real Coding 2026 - Spring Boot Backend</title>
+<title>2026 RealCoding - Spring Boot Backend</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
@@ -463,7 +463,7 @@ def generate_index(files: list[tuple[str, str, str]]) -> str:
 <body>
 <div class="container">
   <header>
-    <h1>CNU26 Real Coding 2026</h1>
+    <h1>2026 RealCoding</h1>
     <p>Spring Boot Backend - Lecture Slides</p>
   </header>
   <div class="hint">

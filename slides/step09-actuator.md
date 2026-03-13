@@ -6,7 +6,7 @@ paginate: true
 
 # Step 9: Actuator와 Metric으로 모니터링
 
-**CNU26 Real Coding 2026**
+**2026 RealCoding**
 
 브랜치: `web/metric`
 실습: `web/metric-practice`
