@@ -195,3 +195,17 @@ Spring Boot 기반 백엔드 강의 프로젝트입니다.
   - Before: `stream().skip().limit()` 로 전체 데이터를 메모리에 로드 후 수동 페이징
   - After: DB 레벨에서 `LIMIT`/`OFFSET` + `COUNT` 쿼리 자동 생성
 - API 사용: `GET /users?page=0&size=10&sort=name,asc`
+
+### Step 17. 프론트엔드 연동 API 완성 - 비즈니스 요구사항을 API 로 풀어내기
+- **branch:** `feature/frontend-api`
+- 프론트엔드 화면 흐름 → 백엔드 API 매핑
+  - 회원가입: `POST /users` (기존 API 재사용)
+  - 로그인: `POST /users/login` (기존 API 재사용)
+  - 상품 검색: `GET /shop/search` (기존 API 재사용)
+  - 구매: `POST /orders` (신규, JWT 인증 필요)
+  - 주문 목록: `GET /orders` (신규, JWT 인증 필요)
+- 주문(Order) 도메인 구현: Entity → Repository → Service → Controller
+- 비즈니스 요구사항 분석
+  - "유저 체크" = JWT 인증 (로그인 여부) + DB 유효성 검증 (유저 존재 여부)
+  - 주문 시 상품 정보 스냅샷 저장 (외부 API 데이터 변동 대비)
+  - userId 는 요청 Body 가 아닌 JWT 토큰에서 추출 (보안)
