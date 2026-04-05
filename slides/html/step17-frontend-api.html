@@ -1,9 +1,205 @@
----
-marp: true
-theme: default
-paginate: true
----
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step 17: 프론트엔드 연동 API 완성</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/solarized.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 
+  :root {
+    --r-heading-font: 'Noto Sans KR', sans-serif;
+    --r-main-font: 'Noto Sans KR', sans-serif;
+    --r-code-font: 'JetBrains Mono', 'D2Coding', monospace;
+    --r-heading-color: #2563eb;
+    --r-link-color: #2563eb;
+    --r-link-color-hover: #1d4ed8;
+    --accent: #2563eb;
+    --accent-dark: #1e40af;
+  }
+
+  .reveal h1, .reveal h2, .reveal h3 {
+    text-transform: none;
+  }
+  .reveal h1 {
+    font-size: 1.8em;
+    color: var(--accent);
+  }
+  .reveal h2 {
+    font-size: 1.3em;
+    color: var(--accent-dark);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 0.3em;
+    margin-bottom: 0.5em;
+  }
+  .reveal h3 {
+    font-size: 1.05em;
+    color: var(--accent-dark);
+  }
+
+  /* Code blocks */
+  .reveal pre {
+    font-size: 0.65em;
+    max-height: 480px;
+    overflow: auto;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 8px;
+  }
+  .reveal pre code {
+    max-height: 480px;
+    padding: 16px;
+    line-height: 1.4;
+  }
+  .reveal code {
+    font-family: 'JetBrains Mono', 'D2Coding', monospace;
+  }
+  .reveal p code, .reveal li code, .reveal td code {
+    background: #eee8d5;
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: #cb4b16;
+  }
+
+  /* Tables */
+  .reveal table {
+    font-size: 0.7em;
+    border-collapse: collapse;
+    margin: 0.5em auto;
+  }
+  .reveal table th {
+    background: var(--accent);
+    color: white;
+    padding: 0.5em 1em;
+    font-weight: 500;
+  }
+  .reveal table td {
+    padding: 0.4em 1em;
+    border-bottom: 1px solid #d3cbb7;
+  }
+  .reveal table tr:nth-child(even) {
+    background: #eee8d5;
+  }
+
+  /* Blockquote */
+  .reveal blockquote {
+    background: #eee8d5;
+    border-left: 4px solid var(--accent);
+    padding: 0.8em 1.2em;
+    font-size: 0.85em;
+    border-radius: 0 8px 8px 0;
+    width: 90%;
+    text-align: left;
+    box-shadow: none;
+  }
+
+  /* Lists */
+  .reveal ul, .reveal ol {
+    font-size: 0.85em;
+    text-align: left;
+    display: block;
+  }
+  .reveal li {
+    margin-bottom: 0.3em;
+    line-height: 1.5;
+  }
+
+  /* Typography */
+  .reveal strong {
+    color: var(--accent-dark);
+  }
+  .reveal del {
+    opacity: 0.5;
+  }
+
+  /* Layout */
+  .reveal .slides section {
+    text-align: left;
+    padding: 20px 40px;
+  }
+  .reveal .slides section h1,
+  .reveal .slides section h2 {
+    text-align: left;
+  }
+
+  /* Slide number */
+  .reveal .slide-number {
+    font-size: 0.6em;
+    color: #93a1a1;
+    right: 16px;
+    bottom: 42px;
+  }
+
+  /* Controls */
+  .reveal .controls {
+    color: var(--accent);
+  }
+
+  /* Progress bar */
+  .reveal .progress {
+    color: var(--accent);
+    height: 4px;
+  }
+
+  /* Step navigation bar */
+  .step-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 36px;
+    background: #073642;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.75rem;
+    z-index: 100;
+    box-shadow: 0 -1px 4px rgba(0,0,0,0.15);
+  }
+  .step-nav a {
+    color: #93a1a1;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .step-nav a:hover {
+    color: #fdf6e3;
+    background: #586e75;
+  }
+  .step-nav .nav-center {
+    color: #839496;
+  }
+  .step-nav .nav-center a {
+    color: #2aa198;
+  }
+  .step-nav .nav-center a:hover {
+    color: #fdf6e3;
+  }
+  .step-nav .shortcut-hint {
+    color: #586e75;
+    font-size: 0.65rem;
+  }
+
+  /* Adjust reveal progress bar above nav */
+  .reveal .progress {
+    bottom: 36px;
+  }
+</style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n----\n$">
+      <textarea data-template>
 # Step 17: 프론트엔드 연동 API 완성
 ## 비즈니스 요구사항을 API 로 풀어내기
 
@@ -259,3 +455,34 @@ const orders = await fetch('/orders',
 - 결제 연동은? → PG 연동 필요, 현재는 "주문 = 완료"로 간소화
 
 **비즈니스 요구사항은 항상 변한다 → 지금 필요한 것만 만들자!**
+      </textarea>
+    </section>
+  </div>
+</div>
+
+<!-- Step navigation bar -->
+<div class="step-nav">
+  <div><a href="step16-cors.html">&larr; Step 16</a></div>
+  <div class="nav-center"><a href="index.html">&#9776; Index</a></div>
+  <div> <span class="shortcut-hint">&nbsp;&nbsp;?=shortcuts</span></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    transition: 'fade',
+    width: 1200,
+    height: 700,
+    margin: 0.04,
+    progress: true,
+    help: true,
+    plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+  });
+</script>
+</body>
+</html>

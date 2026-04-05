@@ -1,4 +1,4 @@
-# CNU26 Backend - Real Coding 2026
+# 2026 RealCoding - Spring Boot Backend
 
 Spring Boot 기반 백엔드 강의 프로젝트입니다.
 쇼핑몰(유저 기능 + 네이버 쇼핑 정보)을 단계별로 만들어갑니다.

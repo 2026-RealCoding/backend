@@ -6,7 +6,7 @@ paginate: true
 
 # Step 2: Web 의존성 추가
 
-**CNU26 Real Coding 2026 - Spring Boot Backend**
+**2026 RealCoding - Spring Boot Backend**
 
 브랜치: `web/start`
 

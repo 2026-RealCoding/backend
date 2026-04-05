@@ -6,7 +6,7 @@ paginate: true
 
 # Step 5: Swagger로 API 문서 자동화
 
-**CNU26 Real Coding 2026 - Spring Boot Backend**
+**2026 RealCoding - Spring Boot Backend**
 
 브랜치: `web/swagger` | 실습: `web/swagger-practice`
 
