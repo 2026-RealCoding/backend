@@ -69,12 +69,15 @@ public User getUser(@PathVariable Long id) {
 }
 ```
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+> `.map()`, `.orElseThrow()`는 Optional + 람다 문법이다. "값이 없으면 예외를 던진다"는 흐름만 파악하자.
+
 ```java
 // Service에서 예외를 던짐
 public User getUserById(Long id) {
-    return userRepository.findById(id)
-        .map(this::toDto)
-        .orElseThrow(() -> new UserNotFoundException(id));
+    return userRepository.findById(id)       // Optional<User> 반환
+        .map(this::toDto)                    // 값이 있으면 변환
+        .orElseThrow(() -> new UserNotFoundException(id));  // 없으면 예외
 }
 ```
 
@@ -100,7 +103,8 @@ public class InvalidRequestException extends RuntimeException {
 }
 ```
 
-> `RuntimeException` = Unchecked Exception = `throws` 선언 불필요
+> `RuntimeException` = Unchecked Exception (실행 중 발생하는 예외로, try-catch를 강제하지 않는다) = `throws` 선언 불필요
+> 반면 Checked Exception (예: `IOException`)은 반드시 try-catch 또는 `throws`가 필요하다.
 
 ---
 
@@ -205,6 +209,8 @@ curl -s http://localhost:8080/users/-1/detail | python3 -m json.tool
 # 정상 조회 → 200
 curl -s http://localhost:8080/users/1 | python3 -m json.tool
 ```
+
+> (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 
 ---
 

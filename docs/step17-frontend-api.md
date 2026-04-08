@@ -172,7 +172,7 @@ public class OrderController {
     // POST /orders - 구매
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(
-            @RequestAttribute("userId") Long userId,  // JWT 에서 추출
+            @RequestAttribute("userId") Long userId,  // JWT 에서 추출 (인터셉터나 필터에서 설정한 값을 컨트롤러에서 받아오는 어노테이션)
             @RequestBody OrderRequest request) {
         OrderResponse created = orderService.createOrder(userId, request);
         return ResponseEntity.created(URI.create("/orders/" + created.id())).body(created);
@@ -270,6 +270,54 @@ src/main/java/com/inspire12/backend/
 src/main/resources/
 └── data.sql                            ← 수정 (orders 초기 데이터 추가)
 ```
+
+---
+
+## 실습 가이드
+
+### 브랜치 전환
+
+```bash
+git checkout feature/frontend-api-practice
+```
+
+### practice 브랜치 사용법
+
+코드에 `// TODO` 주석으로 비어 있는 부분을 채우면 된다.
+
+### 실습 과제
+
+1. `OrderEntity` 클래스를 완성하라 (JPA 어노테이션 추가)
+2. `OrderRepository` 인터페이스를 작성하라 (JpaRepository 상속 + 쿼리 메서드)
+3. `OrderController`의 API 엔드포인트를 구현하라
+
+### 확인 방법
+
+```bash
+# macOS / Linux
+./gradlew bootRun
+
+# Windows
+gradlew.bat bootRun
+```
+
+> curl 명령어는 Windows에서는 Git Bash 또는 PowerShell에서 실행한다.
+
+Postman이나 curl로 다음을 테스트:
+- `POST /orders` — 주문 생성
+- `GET /orders?userId=1` — 주문 목록 조회
+
+### 정답 확인
+
+```bash
+git diff feature/frontend-api-practice..feature/frontend-api
+```
+
+---
+
+## 핵심 정리
+
+> **프론트엔드 연동은 새로운 API 를 만드는 것보다 기존 API 를 잘 조합하는 것이 중요하다. 주문 시 상품 정보는 스냅샷으로 저장하고, userId 는 JWT 토큰에서 서버가 직접 추출하여 보안을 확보한다.**
 
 ---
 

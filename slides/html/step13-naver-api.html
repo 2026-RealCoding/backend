@@ -342,7 +342,7 @@ public List<ShoppingItem> searchProducts(String query, int display) {
 }
 ```
 
-**체이닝 방식으로 직관적인 HTTP 요청 구성**
+**메서드 체이닝(Method Chaining)**: 각 메서드가 자기 자신을 반환하여 `.`으로 연결하는 패턴. 마치 문장을 읽듯이 코드를 작성할 수 있다.
 
 ---
 
@@ -386,7 +386,8 @@ ${NAVER_CLIENT_ID:your-client-id}
 없으면 → "your-client-id" (기본값) 사용
 ```
 
-**API 키를 코드에 직접 넣지 않는다!**
+> **주의:** API 키를 소스코드에 직접 입력하면 안 된다! 반드시 환경변수나 설정 파일을 사용하자.
+
 - 코드에 넣으면 → Git에 노출될 위험
 - 환경변수로 관리 → 안전
 
@@ -430,9 +431,22 @@ git checkout shop/naver-api-practice
 
 **테스트:**
 ```bash
+# macOS / Linux
 export NAVER_CLIENT_ID=발급받은_ID
 export NAVER_CLIENT_SECRET=발급받은_Secret
+
+# Windows (cmd)
+set NAVER_CLIENT_ID=발급받은_ID
+set NAVER_CLIENT_SECRET=발급받은_Secret
+
+# Windows (PowerShell)
+$env:NAVER_CLIENT_ID="발급받은_ID"
+$env:NAVER_CLIENT_SECRET="발급받은_Secret"
+
 ./gradlew bootRun
+# Windows: gradlew.bat bootRun
+
+# (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl "http://localhost:8080/shop/search?query=맥북&display=5"
 ```
 

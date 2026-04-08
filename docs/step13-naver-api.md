@@ -85,6 +85,8 @@ Headers:
 
 ### @Value와 환경변수
 
+> **주의:** API 키를 소스코드에 직접 입력하면 안 된다! 반드시 환경변수나 설정 파일을 사용하자.
+
 API 키 같은 민감한 정보는 코드에 직접 넣으면 안 된다. 설정 파일 또는 환경변수에서 주입받는다.
 
 ```java
@@ -218,6 +220,8 @@ public class NaverShoppingService {
 
 #### RestClient 호출 흐름 분석
 
+아래 코드는 **메서드 체이닝(Method Chaining)** 패턴을 사용한다. 각 메서드가 자기 자신을 반환하여 `.`으로 연결하는 방식으로, 마치 문장을 읽듯이 코드를 작성할 수 있다.
+
 ```java
 restClient.get()                    // 1. HTTP GET 메서드
     .uri(uriBuilder -> uriBuilder   // 2. URL 구성
@@ -333,11 +337,23 @@ git diff shop/naver-api-practice..shop/naver-api
 
 ```bash
 # 환경변수로 API 키 설정 후 실행
+
+# macOS / Linux
 export NAVER_CLIENT_ID=발급받은_Client_ID
 export NAVER_CLIENT_SECRET=발급받은_Client_Secret
-./gradlew bootRun
 
-# 상품 검색
+# Windows (cmd)
+set NAVER_CLIENT_ID=발급받은_Client_ID
+set NAVER_CLIENT_SECRET=발급받은_Client_Secret
+
+# Windows (PowerShell)
+$env:NAVER_CLIENT_ID="발급받은_Client_ID"
+$env:NAVER_CLIENT_SECRET="발급받은_Client_Secret"
+
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
+
+# 상품 검색 (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl "http://localhost:8080/shop/search?query=맥북&display=5"
 
 # Swagger UI에서 테스트

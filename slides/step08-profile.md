@@ -59,10 +59,20 @@ spring.profiles.active=dev
 spring.profiles.active=dev
 
 # 2. 실행 인자로 전달
+# macOS / Linux
 ./gradlew bootRun --args='--spring.profiles.active=prod'
+# Windows (cmd)
+gradlew.bat bootRun --args="--spring.profiles.active=prod"
+# Windows (PowerShell)
+gradlew.bat bootRun --args='--spring.profiles.active=prod'
 
 # 3. 환경 변수
+# macOS / Linux
 export SPRING_PROFILES_ACTIVE=prod
+# Windows (cmd)
+set SPRING_PROFILES_ACTIVE=prod
+# Windows (PowerShell)
+$env:SPRING_PROFILES_ACTIVE="prod"
 ```
 
 ---
@@ -195,10 +205,18 @@ logging.level.com.inspire12.backend=DEBUG
 **After:** 프로필로 자동 전환
 ```bash
 # 개발
+# macOS / Linux
 ./gradlew bootRun
+# Windows (cmd / PowerShell)
+gradlew.bat bootRun
 
 # 운영
+# macOS / Linux
 ./gradlew bootRun --args='--spring.profiles.active=prod'
+# Windows (cmd)
+gradlew.bat bootRun --args="--spring.profiles.active=prod"
+# Windows (PowerShell)
+gradlew.bat bootRun --args='--spring.profiles.active=prod'
 ```
 
 코드 수정 없이, 실행 인자만 바꾸면 끝!
@@ -232,7 +250,7 @@ git checkout web/profile-practice
 4. `logback-spring.xml`에 `<springProfile>` 추가
 5. `SystemController` 구현
 
-**테스트:**
+**테스트:** (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 ```bash
 curl http://localhost:8080/system/profile
 curl http://localhost:8080/system/log-test

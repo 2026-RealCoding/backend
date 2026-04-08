@@ -28,6 +28,8 @@ REST API에서 각 HTTP 메서드는 특정 작업을 의미한다:
 | **PUT** | Update | 전체 수정 | O (같은 데이터로 여러 번 수정해도 동일) |
 | **DELETE** | Delete | 삭제 | O (이미 삭제된 것을 다시 삭제해도 동일) |
 
+> **멱등성(Idempotency)이란?** 같은 요청을 여러 번 보내도 결과가 동일한 성질을 말한다. 예를 들어, "이름을 홍길동으로 변경해줘"를 10번 보내도 이름은 여전히 홍길동이다(PUT, 멱등). 반면 "유저를 한 명 추가해줘"를 10번 보내면 10명이 추가된다(POST, 비멱등).
+
 ### @RequestBody
 
 클라이언트가 보낸 **JSON 요청 본문**을 Java 객체로 변환한다.
@@ -96,7 +98,7 @@ public class UserController {
             new User(2L, "김철수", "kim@example.com"),
             new User(3L, "이영희", "lee@example.com")
     ));
-    private final AtomicLong idGenerator = new AtomicLong(4);
+    private final AtomicLong idGenerator = new AtomicLong(4); // (동시에 여러 요청이 와도 안전하게 숫자를 증가시키는 도구)
 ```
 
 **변경점:**
@@ -104,6 +106,8 @@ public class UserController {
 - `AtomicLong`으로 새 유저의 ID를 자동 생성
 
 #### GET (조회) - 실제 데이터 사용
+
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. 아래 코드에서 `.stream()`, `.filter()`, `.findFirst()` 등은 Java의 **Stream API**로, 리스트에서 원하는 데이터를 찾는 방법이다. 지금은 "리스트에서 조건에 맞는 것을 찾는 코드"라고 이해하면 충분하다.
 
 ```java
     @GetMapping
@@ -113,17 +117,17 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable Long id) {
-        return users.stream()
-                .filter(u -> u.id().equals(id))
-                .findFirst()
-                .orElse(null);
+        return users.stream()                    // 리스트를 하나씩 살펴보면서
+                .filter(u -> u.id().equals(id))  // id가 일치하는 것을 찾아서
+                .findFirst()                     // 첫 번째 결과를 가져온다
+                .orElse(null);                   // 없으면 null 반환
     }
 
     @GetMapping("/search")
     public List<User> searchUsers(@RequestParam String name) {
-        return users.stream()
-                .filter(u -> u.name().contains(name))
-                .toList();
+        return users.stream()                        // 리스트를 하나씩 살펴보면서
+                .filter(u -> u.name().contains(name)) // 이름에 검색어가 포함된 것만
+                .toList();                            // 리스트로 모은다
     }
 ```
 
@@ -174,6 +178,8 @@ public class UserController {
 
 #### DELETE (삭제) - 204 No Content 또는 404
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. `removeIf(u -> u.id().equals(id))` 에서 `u -> ...` 부분은 **람다 표현식(Lambda)**이라는 문법이다. 지금은 "조건에 맞는 항목을 삭제하는 코드"라고 이해하면 충분하다.
+
 ```java
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
@@ -192,6 +198,8 @@ public class UserController {
 ---
 
 ## API 테스트 (curl 명령어)
+
+> (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 
 ```bash
 # 전체 조회
@@ -228,6 +236,13 @@ git checkout web/post
 
 # 실습 (TODO 빈칸 채우기)
 git checkout web/post-practice
+```
+
+### 서버 실행
+
+```bash
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
 ```
 
 ### practice 브랜치 사용법

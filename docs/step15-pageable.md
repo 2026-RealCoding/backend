@@ -47,7 +47,7 @@ PageRequest.of(0, 10, Sort.by("name").ascending())
 
 ### Page<T> 란?
 
-조회 결과 + 페이징 메타데이터를 담는 **응답 객체**
+조회 결과 + 페이징 메타데이터(페이지 번호, 전체 개수 등 데이터에 대한 부가 정보)를 담는 **응답 객체**
 
 ```json
 {
@@ -177,6 +177,8 @@ public Page<User> getUsers(Pageable pageable) {
 }
 ```
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+
 Spring MVC 의 `PageableHandlerMethodArgumentResolver` 가
 쿼리 파라미터(`page`, `size`, `sort`)를 자동으로 `Pageable` 객체로 변환한다.
 
@@ -288,8 +290,16 @@ git diff feature/pageable-practice..feature/pageable
 ### 4. 테스트
 
 ```bash
+# macOS / Linux
 ./gradlew bootRun
 
+# Windows
+gradlew.bat bootRun
+```
+
+> curl 명령어는 Windows에서는 Git Bash 또는 PowerShell에서 실행한다.
+
+```bash
 # 기본 조회
 curl http://localhost:8080/users
 

@@ -109,7 +109,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 ### 주의: allowCredentials 와 allowedOrigins
 
-`allowCredentials(true)` 를 사용하면 `allowedOrigins("*")` 는 사용할 수 없다.
+`allowCredentials(true)` 를 사용하면 `allowedOrigins("*")` 는 사용할 수 없다 (보안상 모든 출처를 허용하면서 인증 정보도 허용하면 위험하기 때문).
 반드시 특정 Origin 을 명시해야 한다:
 
 ```java
@@ -143,10 +143,16 @@ Access-Control-Max-Age: 3600
 ### 1. 서버 실행
 
 ```bash
+# macOS / Linux
 ./gradlew bootRun
+
+# Windows
+gradlew.bat bootRun
 ```
 
 ### 2. CORS 헤더 확인 (OPTIONS Preflight)
+
+> curl 명령어는 Windows에서는 Git Bash 또는 PowerShell에서 실행한다.
 
 ```bash
 curl -v -X OPTIONS http://localhost:8080/users \
@@ -201,8 +207,16 @@ git diff feature/cors-practice..feature/cors
 ### 4. 테스트
 
 ```bash
+# macOS / Linux
 ./gradlew bootRun
 
+# Windows
+gradlew.bat bootRun
+```
+
+> curl 명령어는 Windows에서는 Git Bash 또는 PowerShell에서 실행한다.
+
+```bash
 # Preflight 확인
 curl -v -X OPTIONS http://localhost:8080/users \
   -H "Origin: http://localhost:3000" \

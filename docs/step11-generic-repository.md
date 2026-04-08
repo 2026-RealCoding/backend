@@ -44,10 +44,10 @@ public interface ProductRepository {
 
 ### 제네릭(Generic)으로 해결
 
-제네릭은 **타입을 파라미터로** 받는 문법이다. `T`는 "아직 정해지지 않은 타입"을 의미한다.
+제네릭은 **타입을 파라미터로** 받는 문법이다. `T`는 "아직 정해지지 않은 타입"을 의미한다. (T는 저장할 데이터 타입, ID는 식별자 타입을 의미한다. 예: T=User, ID=Long)
 
 ```java
-// T: 엔티티 타입, ID: 기본키 타입
+// T: 엔티티 타입 (User, Product, ...), ID: 기본키 타입 (Long, String, ...)
 public interface CrudRepository<T, ID> {
     List<T> findAll();
     Optional<T> findById(ID id);
@@ -123,9 +123,10 @@ package com.inspire12.backend.repository;
 import com.inspire12.backend.dto.User;
 import java.util.List;
 
-// CrudRepository<User, Long>을 상속하면:
+// CrudRepository<User, Long>을 상속(extends)하면:
 // - findAll, findById, save, deleteById, existsById, count → 자동으로 상속
 // - 커스텀 메서드(findByNameContaining)만 추가로 선언
+// > 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. (상속/extends 개념)
 public interface UserRepository extends CrudRepository<User, Long> {
     // 기본 CRUD 메서드는 상속으로 제공 (선언 불필요!)
 
@@ -263,8 +264,9 @@ git diff layered/generic-repository-practice..layered/generic-repository
 
 ```bash
 ./gradlew bootRun
+# Windows: gradlew.bat bootRun
 
-# 기존과 동일하게 동작하는지 확인
+# 기존과 동일하게 동작하는지 확인 (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl http://localhost:8080/users
 curl http://localhost:8080/users/1
 curl http://localhost:8080/users/search?name=홍

@@ -49,11 +49,13 @@ JPA는 내부적으로 다음과 같은 작업을 수행한다.
 
 1. **기본 생성자로 객체 생성**: DB에서 데이터를 읽어 빈 객체를 먼저 만든다
 2. **Reflection으로 필드 설정**: setter나 필드 접근으로 값을 채운다
-3. **변경 감지 (Dirty Checking)**: 필드 값이 바뀌면 자동으로 UPDATE 쿼리를 실행한다
+3. **변경 감지 (Dirty Checking)**: JPA가 엔티티의 변경을 자동으로 감지하여 UPDATE 쿼리를 실행하는 기능
 
 `record`는 불변(immutable)이므로 setter가 없고, 필드를 변경할 수 없다. 따라서 JPA Entity로 사용할 수 없다.
 
 ### @Transactional
+
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. (@Transactional의 세부 동작, Lazy Loading 등)
 
 트랜잭션은 "모두 성공하거나, 모두 실패하는" 작업 단위이다.
 
@@ -99,7 +101,7 @@ spring.jpa.defer-datasource-initialization=true
 
 | 설정 | 설명 |
 |------|------|
-| `datasource.url` | SQLite DB 파일 경로 |
+| `datasource.url` | SQLite DB 파일 경로 (Windows에서도 동일 경로 사용 - Gradle이 자동 처리) |
 | `ddl-auto=update` | 엔티티 기반으로 테이블 자동 생성/수정 |
 | `show-sql=true` | 실행되는 SQL을 콘솔에 출력 |
 | `defer-datasource-initialization` | JPA 초기화 후 data.sql 실행 |
@@ -160,7 +162,7 @@ import jakarta.persistence.Table;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 데이터베이스가 자동으로 ID 번호를 부여하는 전략
     private Long id;
 
     private String name;
@@ -343,8 +345,10 @@ git diff layered/jpa-practice..layered/jpa
 
 ```bash
 ./gradlew bootRun
+# Windows: gradlew.bat bootRun
 
 # DB에서 데이터 조회 (data.sql로 삽입된 초기 데이터)
+# (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl http://localhost:8080/users
 
 # 유저 생성 (DB에 저장됨 - 서버 재시작해도 유지!)

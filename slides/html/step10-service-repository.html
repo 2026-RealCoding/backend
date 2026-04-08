@@ -215,8 +215,10 @@ Controller 하나에 **모든 것**이 들어 있었다
 ```java
 @RestController
 public class UserController {
-    private final Map<Long, User> store = new ConcurrentHashMap<>(); // 저장소
-    private final AtomicLong sequence = new AtomicLong(1);           // ID 생성
+    // ConcurrentHashMap: 여러 요청이 동시에 와도 안전하게 데이터를 저장하는 Map
+    private final Map<Long, User> store = new ConcurrentHashMap<>();
+    // AtomicLong: 동시 요청에도 안전하게 숫자를 증가시키는 도구
+    private final AtomicLong sequence = new AtomicLong(1);
 
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User req) {
@@ -266,7 +268,7 @@ public class UserController {
 ```java
 public interface UserRepository {
     List<User> findAll();
-    Optional<User> findById(Long id);
+    Optional<User> findById(Long id);  // Optional: 값이 있을 수도, 없을 수도 있는 컨테이너
     User save(User user);
     void deleteById(Long id);
     boolean existsById(Long id);
@@ -274,6 +276,8 @@ public interface UserRepository {
     List<User> findByNameContaining(String name);
 }
 ```
+
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. (Optional, Stream API)
 
 **인터페이스 = "무엇을 할 수 있는가"만 정의**
 구현 방법(메모리, DB, 파일)은 구현체가 결정
@@ -394,7 +398,7 @@ UserRepository (인터페이스)
 
 Service 코드를 **한 줄도 바꾸지 않고** 저장소를 교체할 수 있다
 
-이것이 **의존성 역전 원칙 (DIP)**
+이것이 **DI(Dependency Injection, 의존성 주입)** 를 통한 **의존성 역전 원칙**
 
 ---
 
@@ -445,6 +449,15 @@ git checkout layered/service-repository-practice
 2. `MemoryUserRepository` 구현 (`@Repository`)
 3. `UserService` 비즈니스 로직 구현 (`@Service`)
 4. `UserController`에서 데이터 코드 제거, Service에 위임
+
+**테스트:**
+```bash
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
+
+# (Windows에서는 Git Bash 또는 PowerShell에서 실행)
+curl http://localhost:8080/users
+```
 
 **정답 확인:**
 ```bash

@@ -48,12 +48,12 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzA4MTIzNDU2LCJleHA
 
 #### 2. Payload (페이로드)
 
-전달할 데이터(클레임, Claims)를 담는다.
+전달할 데이터(클레임, Claims — JWT 안에 담긴 데이터 항목. 예: 사용자 ID, 만료 시간)를 담는다.
 
 ```json
 {
   "sub": "1",           // Subject: 사용자 ID
-  "iat": 1708123456,    // Issued At: 발급 시간 (Unix timestamp)
+  "iat": 1708123456,    // Issued At: 발급 시간 (Unix timestamp — 1970년 1월 1일부터 현재까지의 초 단위 시간)
   "exp": 1708127056     // Expiration: 만료 시간 (Unix timestamp)
 }
 ```
@@ -283,6 +283,8 @@ public class JwtUtil {
 
 ---
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+
 ## 실무에서 사용하는 JWT 라이브러리
 
 이번 실습에서는 JWT의 구조를 이해하기 위해 순수 Java로 구현했다. 실무에서는 아래 라이브러리를 사용한다.
@@ -368,8 +370,16 @@ git diff shop/auth-practice..shop/auth
 ### 4. 테스트
 
 ```bash
+# macOS / Linux
 ./gradlew bootRun
 
+# Windows
+gradlew.bat bootRun
+```
+
+> curl 명령어는 Windows에서는 Git Bash 또는 PowerShell에서 실행한다.
+
+```bash
 # 1. 로그인 (토큰 발급)
 curl -X POST http://localhost:8080/users/login \
   -H "Content-Type: application/json" \
@@ -377,7 +387,17 @@ curl -X POST http://localhost:8080/users/login \
 # 응답: {"token":"eyJ..."}
 
 # 2. 발급받은 토큰으로 내 정보 조회
-TOKEN="eyJ...발급받은토큰..."
+# macOS / Linux
+TOKEN=$(curl -s -X POST http://localhost:8080/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"userId":1}' | jq -r '.token')
+
+# Windows (PowerShell)
+$TOKEN = (Invoke-RestMethod -Method Post -Uri http://localhost:8080/users/login `
+  -ContentType "application/json" -Body '{"userId":1}').token
+
+# 또는 Postman에서 토큰을 복사하여 사용
+
 curl http://localhost:8080/users/me \
   -H "Authorization: Bearer $TOKEN"
 # 응답: {"id":1,"name":"홍길동","email":"hong@example.com"}

@@ -376,11 +376,15 @@ curl -H "Accept: text/html" localhost:8080/pages/users        # HTML
 curl -H "Accept: application/json" localhost:8080/pages/users  # JSON
 ```
 
+> (Windows에서는 Git Bash 또는 PowerShell에서 실행)
+
 > `produces` 속성으로 **Content Negotiation** 구현
 
 ---
 
 ## API 테스트
+
+> (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 
 ```bash
 curl http://localhost:8080/users/hello
@@ -398,8 +402,15 @@ curl -v http://localhost:8080/users/-1/detail
 ## 실습: web/get-practice
 
 ```bash
+# 완성 코드 확인
+git checkout web/get
+
+# 실습 (TODO 빈칸 채우기)
 git checkout web/get-practice
 ```
+
+`web/get-practice` 브랜치에는 코드의 주요 부분이 `// TODO:` 주석으로 비어 있다.
+각 TODO를 채워 넣으며 학습한다.
 
 TODO 빈칸을 채워 넣으세요:
 
@@ -410,7 +421,12 @@ public User getUser(/* TODO: id를 받으려면? */) {
 }
 ```
 
-완성 후 `./gradlew bootRun`으로 확인!
+완성 후 실행하여 확인!
+
+```bash
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
+```
 
 ---
 

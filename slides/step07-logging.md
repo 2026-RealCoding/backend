@@ -90,7 +90,7 @@ public class UserService {
 }
 ```
 
-> `{}` = 플레이스홀더. 문자열 연결(+) 대신 사용하면 성능 이점
+> `{}` = 플레이스홀더 (중괄호 자리에 뒤의 인자 값이 자동으로 채워진다). 문자열 연결(+) 대신 사용하면 성능 이점
 
 ---
 
@@ -117,7 +117,7 @@ java.lang.ArithmeticException: / by zero
 | Appender | 용도 | 파일 |
 |---|---|---|
 | **Console** | 콘솔 출력 | - |
-| **File** | 파일 저장 | `./logs/application.log` |
+| **File** | 파일 저장 | `./logs/application.log` (Windows: `.\logs\application.log`) |
 | **Rolling File** | 회전 저장 | 날짜+크기 기반 분할 |
 
 ```xml
@@ -135,6 +135,8 @@ java.lang.ArithmeticException: / by zero
 ---
 
 # Rolling File Appender
+
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. Rolling File XML 설정의 세부 옵션은 실무에서 필요할 때 참고하면 된다.
 
 ```xml
 <appender name="ROLLING_FILE"
@@ -213,9 +215,16 @@ git checkout web/logging-practice
 
 **테스트:**
 ```bash
+# curl 명령 (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl http://localhost:8080/users      # → 콘솔에서 INFO 로그 확인
 curl http://localhost:8080/users/999  # → WARN 로그 확인
-cat ./logs/application.log            # → 파일 로그 확인
+
+# 파일 로그 확인
+# macOS / Linux
+cat ./logs/application.log
+
+# Windows (PowerShell)
+Get-Content .\logs\application.log
 ```
 
 ---

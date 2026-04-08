@@ -14,7 +14,7 @@ OUTPUT_DIR = os.path.join(SLIDES_DIR, "html")
 
 # Step number → branch name mapping
 STEP_BRANCHES = {
-    "step01": "main",
+    "step01": "web/start",
     "step02": "web/start",
     "step03": "web/get",
     "step04": "web/post",

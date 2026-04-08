@@ -24,13 +24,14 @@ Spring Boot 기반 백엔드 강의 프로젝트입니다.
 
 ## Step 진행 과정
 
-### Step 1. 프로젝트 초기 설정
-- **branch:** `main`
-- Spring Boot 프로젝트 생성 및 Gradle 설정
+### Step 1. 개발 환경 설정
+- Java 21, IntelliJ IDEA, Postman, Git 설치
+- 프로젝트 클론 및 환경 확인 (macOS / Windows)
 
-### Step 2. Web 의존성 추가
+### Step 2. 프로젝트 시작하기
 - **branch:** `web/start`
-- `spring-boot-starter-web` 의존성 추가
+- Spring Boot 프로젝트 구조, `@SpringBootApplication`, `build.gradle`
+- `spring-boot-starter-web` 의존성 추가 및 내장 톰캣 실행
 
 ### Step 3. GET 요청/응답 다루기
 - **branch:** `web/get`

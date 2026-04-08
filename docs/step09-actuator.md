@@ -155,9 +155,10 @@ public class UserController {
     private final UserService userService;
     private final Counter userCreateCounter;
 
+    // MeterRegistry: Micrometer의 메트릭 등록소 — 모든 측정값을 관리하는 중앙 객체
     public UserController(UserService userService, MeterRegistry meterRegistry) {
         this.userService = userService;
-        // Counter 등록
+        // Counter 등록 (Counter: 누적 카운트 메트릭 — 숫자가 계속 올라가기만 하는 측정값)
         this.userCreateCounter = Counter.builder("user.created.count")
                 .description("유저 생성 횟수")
                 .tag("controller", "UserController")
@@ -220,7 +221,7 @@ curl http://localhost:8080/actuator/metrics/user.created.count
 
 - **Micrometer**는 메트릭 수집의 **추상화 계층**이다 (SLF4J의 메트릭 버전).
 - Spring Boot Actuator에 기본 포함되어 있다.
-- `Counter`, `Gauge`, `Timer` 등 다양한 메트릭 타입을 제공한다.
+- `Counter` (누적 카운트), `Gauge` (현재 값), `Timer` (소요 시간) 등 다양한 메트릭 타입을 제공한다.
 
 ### 6. Actuator 엔드포인트 안내 API
 
@@ -271,7 +272,10 @@ git checkout web/metric-practice
 
 ```bash
 # 서버 실행
+# macOS / Linux
 ./gradlew bootRun
+# Windows (cmd / PowerShell)
+gradlew.bat bootRun
 
 # 헬스 체크 (user 항목 포함 확인)
 curl -s http://localhost:8080/actuator/health | python3 -m json.tool
@@ -290,6 +294,8 @@ curl -s http://localhost:8080/actuator/metrics/user.created.count | python3 -m j
 # HTTP 요청 메트릭 확인
 curl -s http://localhost:8080/actuator/metrics/http.server.requests | python3 -m json.tool
 ```
+
+> (Windows에서는 Git Bash 또는 PowerShell에서 curl 명령을 실행)
 
 ### 4. 완성 코드 확인
 

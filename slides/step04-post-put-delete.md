@@ -32,6 +32,8 @@ paginate: true
 
 > 각 메서드에 맞는 **의미 있는 상태코드**를 반환하는 것이 REST API의 기본
 
+> **멱등성이란?** 같은 요청을 여러 번 보내도 결과가 동일한 성질. "이름을 홍길동으로 바꿔줘"를 10번 보내도 이름은 홍길동(PUT, 멱등). "유저 추가해줘"를 10번 보내면 10명 추가(POST, 비멱등).
+
 ---
 
 ## Before vs After: 핵심 변화
@@ -49,7 +51,7 @@ public List<User> getUsers() {
 
 ```java
 private final List<User> users = new ArrayList<>(List.of(...)); // 가변!
-private final AtomicLong idGenerator = new AtomicLong(4);
+private final AtomicLong idGenerator = new AtomicLong(4); // (동시에 여러 요청이 와도 안전하게 숫자를 증가시키는 도구)
 
 @GetMapping
 public List<User> getUsers() {
@@ -127,6 +129,8 @@ public ResponseEntity<User> updateUser(
 
 ## DELETE - 유저 삭제 (204 No Content)
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. `removeIf(u -> ...)` 의 `->` 는 **람다 표현식**이라는 문법이다. "조건에 맞는 것을 삭제"라고 이해하면 충분하다.
+
 ```java
 @DeleteMapping("/{id}")
 public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
@@ -156,6 +160,8 @@ public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 ---
 
 ## API 테스트
+
+> (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 
 ```bash
 # 생성
@@ -195,6 +201,11 @@ curl http://localhost:8080/users
 
 ```bash
 git checkout web/post-practice
+```
+
+```bash
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
 ```
 
 TODO 빈칸을 채워 CRUD를 완성하세요!

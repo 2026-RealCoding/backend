@@ -94,7 +94,7 @@ Pageable pageable = PageRequest.of(
 }
 ```
 
-데이터 + **페이징 메타데이터** 를 함께 제공
+데이터 + **페이징 메타데이터**(페이지 번호, 전체 개수 등 데이터에 대한 부가 정보) 를 함께 제공
 
 ---
 
@@ -156,6 +156,8 @@ public Page<User> getUsers(Pageable pageable) {
 
 `Pageable` 파라미터를 추가하면 Spring 이 쿼리 파라미터를 자동 변환!
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. (내부적으로 `PageableHandlerMethodArgumentResolver` 가 처리)
+
 **GET /users/page** (수동 페이징) → **삭제** (GET /users 로 대체)
 
 ---
@@ -203,12 +205,21 @@ curl "http://localhost:8080/users/search?name=홍&page=0&size=5"
 git checkout feature/pageable-practice
 ```
 
+**실행:**
+```bash
+# macOS / Linux
+./gradlew bootRun
+
+# Windows
+gradlew.bat bootRun
+```
+
 **과제:**
 1. `UserRepository` 에 `Page<UserEntity> findByNameContaining(String, Pageable)` 추가
 2. `UserService` 의 `getAllUsers`, `searchByName` 을 Pageable 버전으로 변경
 3. `UserController` 에 Pageable 파라미터 적용, /page 엔드포인트 제거
 
-**테스트:**
+**테스트:** (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 ```bash
 curl "http://localhost:8080/users?page=0&size=5"
 curl "http://localhost:8080/users/search?name=홍&page=0&size=5"

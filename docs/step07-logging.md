@@ -68,10 +68,13 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     public List<User> getAllUsers() {
+        // 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+        // 아래의 .stream(), .map(), .toList()는 Stream API와 람다 문법이다.
+        // "목록을 변환한다"는 흐름만 이해하면 된다.
         List<User> users = userRepository.findAll().stream()
                 .map(this::toDto)
                 .toList();
-        log.info("유저 목록 조회 - 총 {}명", users.size());  // {} = 플레이스홀더
+        log.info("유저 목록 조회 - 총 {}명", users.size());  // {} = 플레이스홀더 (중괄호 자리에 뒤의 인자 값이 자동으로 채워진다)
         return users;
     }
 
@@ -116,6 +119,7 @@ public ResponseEntity<ErrorResponse> handleException(Exception e) {
 <configuration>
 
     <!-- ========== 변수 정의 ========== -->
+    <!-- 로그 파일 저장 경로: Windows에서는 프로젝트 루트의 logs 폴더 (.\logs\) -->
     <property name="LOG_DIR" value="./logs"/>
     <property name="LOG_FILE" value="application"/>
 
@@ -135,6 +139,8 @@ public ResponseEntity<ErrorResponse> handleException(Exception e) {
     </appender>
 
     <!-- ========== 롤링 파일 (Rolling File Appender) ========== -->
+    <!-- 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. -->
+    <!-- Rolling File은 로그 파일이 너무 커지지 않도록 자동으로 분할/삭제해주는 설정이다. -->
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${LOG_FILE}-rolling.log</file>
         <encoder>
@@ -216,15 +222,26 @@ git checkout web/logging-practice
 
 ```bash
 # 서버 실행
+# macOS / Linux
 ./gradlew bootRun
 
-# API 호출 후 콘솔 로그 확인
+# Windows (cmd / PowerShell)
+gradlew.bat bootRun
+
+# API 호출 후 콘솔 로그 확인 (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl http://localhost:8080/users
 curl http://localhost:8080/users/1
 curl http://localhost:8080/users/999
 
 # 파일 로그 확인
+# macOS / Linux
 cat ./logs/application.log
+
+# Windows (cmd)
+type .\logs\application.log
+
+# Windows (PowerShell)
+Get-Content .\logs\application.log
 ```
 
 ### 4. 완성 코드 확인

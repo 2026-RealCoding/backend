@@ -198,9 +198,13 @@ curl -H "Accept: text/html" http://localhost:8080/pages/users
 curl -H "Accept: application/json" http://localhost:8080/pages/users
 ```
 
+> (Windows에서는 Git Bash 또는 PowerShell에서 실행)
+
 ---
 
 ## API 테스트 (curl 명령어)
+
+> (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 
 ```bash
 # 1. 단순 문자열
@@ -256,7 +260,11 @@ public User getUser(/* TODO: @PathVariable 사용하여 id 받기 */) {
 
 ### 확인 방법
 
-1. `./gradlew bootRun`으로 실행한다.
+1. 서버를 실행한다:
+   ```bash
+   ./gradlew bootRun
+   # Windows: gradlew.bat bootRun
+   ```
 2. 각 엔드포인트를 curl 또는 브라우저로 호출한다.
 3. 기대한 JSON 응답이 오는지 확인한다.
 

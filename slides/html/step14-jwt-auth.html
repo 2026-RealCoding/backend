@@ -232,7 +232,7 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzA4MTI3MDU2fQ.X5Z_abc123
 | 파트 | 내용 | 역할 |
 |------|------|------|
 | Header | `{"alg":"HS256","typ":"JWT"}` | 알고리즘 정보 |
-| Payload | `{"sub":"1","iat":...,"exp":...}` | 사용자 데이터 |
+| Payload | `{"sub":"1","iat":...,"exp":...}` | 사용자 데이터 (Claim = JWT 안에 담긴 데이터 항목) |
 | Signature | HMAC-SHA256(header.payload, 비밀키) | 위조 방지 서명 |
 
 각 파트는 **Base64URL 인코딩**된 상태
@@ -271,7 +271,7 @@ public class JwtUtil {
         String header = """
             {"alg":"HS256","typ":"JWT"}""";
 
-        long now = Instant.now().getEpochSecond();
+        long now = Instant.now().getEpochSecond(); // Unix timestamp (1970년 1월 1일부터의 초)
         long exp = now + EXPIRATION_SECONDS;
         String payload = """
             {"sub":"%d","iat":%d,"exp":%d}"""
@@ -359,6 +359,8 @@ public ResponseEntity<Map<String, String>> login(
 }
 ```
 
+> curl 명령어는 Windows에서는 Git Bash 또는 PowerShell에서 실행한다.
+
 ```bash
 curl -X POST http://localhost:8080/users/login \
   -H "Content-Type: application/json" \
@@ -422,6 +424,8 @@ public ResponseEntity<User> getCurrentUser(
 
 ---
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+
 ## 실무 라이브러리 소개
 
 | 라이브러리 | Gradle 의존성 | 특징 |
@@ -459,10 +463,16 @@ git checkout shop/auth-practice
 
 **테스트:**
 ```bash
-# 로그인
+# macOS / Linux
 TOKEN=$(curl -s -X POST http://localhost:8080/users/login \
   -H "Content-Type: application/json" \
   -d '{"userId":1}' | jq -r '.token')
+
+# Windows (PowerShell)
+$TOKEN = (Invoke-RestMethod -Method Post -Uri http://localhost:8080/users/login `
+  -ContentType "application/json" -Body '{"userId":1}').token
+
+# 또는 Postman에서 토큰을 복사하여 사용
 
 # 내 정보 조회
 curl http://localhost:8080/users/me \

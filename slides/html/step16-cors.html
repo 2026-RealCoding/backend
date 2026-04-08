@@ -314,6 +314,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 ## 주의: allowCredentials + allowedOrigins
 
+보안상 모든 출처를 허용하면서 인증 정보도 허용하면 위험하기 때문:
+
 ```java
 // ❌ 에러! credentials 사용 시 * 불가
 .allowedOrigins("*")
@@ -348,6 +350,8 @@ Access-Control-Max-Age: 3600
 
 ## 확인 방법
 
+> curl 명령어는 Windows에서는 Git Bash 또는 PowerShell에서 실행한다.
+
 ```bash
 # Preflight 확인 (OPTIONS)
 curl -v -X OPTIONS http://localhost:8080/users \
@@ -369,6 +373,15 @@ curl -v http://localhost:8080/users \
 
 ```bash
 git checkout feature/cors-practice
+```
+
+**실행:**
+```bash
+# macOS / Linux
+./gradlew bootRun
+
+# Windows
+gradlew.bat bootRun
 ```
 
 **과제:**

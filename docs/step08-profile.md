@@ -159,11 +159,21 @@ management.endpoints.web.exposure.include=*
 
 ```bash
 # 개발 환경 실행
+# macOS / Linux
 ./gradlew bootRun
+# Windows (cmd / PowerShell)
+gradlew.bat bootRun
 # → application-dev.properties 적용 (port=8080, DEBUG)
 
 # 운영 환경 실행
+# macOS / Linux
 ./gradlew bootRun --args='--spring.profiles.active=prod'
+
+# Windows (cmd)
+gradlew.bat bootRun --args="--spring.profiles.active=prod"
+
+# Windows (PowerShell)
+gradlew.bat bootRun --args='--spring.profiles.active=prod'
 # → application-prod.properties 적용 (port=80, WARN)
 ```
 
@@ -268,16 +278,26 @@ git checkout web/profile-practice
 
 ```bash
 # dev 프로필로 실행 (기본)
+# macOS / Linux
 ./gradlew bootRun
+# Windows (cmd / PowerShell)
+gradlew.bat bootRun
 
-# 프로필 확인
+# 프로필 확인 (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl http://localhost:8080/system/profile
 
 # 로그 테스트 - 콘솔에서 DEBUG까지 출력되는지 확인
 curl http://localhost:8080/system/log-test
 
 # prod 프로필로 실행
+# macOS / Linux
 ./gradlew bootRun --args='--spring.profiles.active=prod'
+
+# Windows (cmd)
+gradlew.bat bootRun --args="--spring.profiles.active=prod"
+
+# Windows (PowerShell)
+gradlew.bat bootRun --args='--spring.profiles.active=prod'
 
 # 로그 테스트 - 콘솔에서 WARN, ERROR만 출력되는지 확인
 curl http://localhost:80/system/log-test

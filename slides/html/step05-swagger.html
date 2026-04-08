@@ -235,7 +235,7 @@
 
 | 용어 | 설명 |
 |---|---|
-| **OpenAPI** | REST API 표준 명세 |
+| **OpenAPI** | REST API의 구조를 설명하는 국제 표준 형식 |
 | **Swagger UI** | 명세를 웹에서 보여주는 도구 |
 | **springdoc-openapi** | Spring Boot용 OpenAPI 자동 생성 라이브러리 |
 
@@ -316,6 +316,8 @@ public ResponseEntity<User> getCurrentUser(
 
 ## @ApiResponse / @ApiResponses
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. `@ApiResponses({ ... })` 안의 중괄호 `{}`는 Java 배열 문법으로, 여러 개의 `@ApiResponse`를 묶는 것이다.
+
 ```java
 @Operation(summary = "유저 삭제")
 @ApiResponses({
@@ -383,6 +385,11 @@ OpenAPI JSON 명세: `http://localhost:8080/v3/api-docs`
 
 ```bash
 git checkout web/swagger-practice
+```
+
+```bash
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
 ```
 
 TODO를 채워 Swagger 문서화를 완성하세요!

@@ -234,7 +234,7 @@ public interface ProductRepository {
 
 ## 해결: 제네릭 (Generic)
 
-타입을 **파라미터**로 받는다
+타입을 **파라미터**로 받는다 (T는 저장할 데이터 타입, ID는 식별자 타입을 의미한다. 예: T=User, ID=Long)
 
 ```java
 // T: 엔티티 타입 (User, Product, Order, ...)
@@ -281,6 +281,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findByNameContaining(String name);
 }
 ```
+
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. (상속/extends 개념)
 
 **extends 한 줄 + 커스텀 1개만 선언!**
 
@@ -414,6 +416,15 @@ git checkout layered/generic-repository-practice
 2. `UserRepository`에서 기본 CRUD 선언 제거, `extends CrudRepository<User, Long>` 추가
 3. 커스텀 메서드 `findByNameContaining`만 남기기
 4. 기존 API가 동일하게 동작하는지 확인
+
+**테스트:**
+```bash
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
+
+# (Windows에서는 Git Bash 또는 PowerShell에서 실행)
+curl http://localhost:8080/users
+```
 
 **정답 확인:**
 ```bash

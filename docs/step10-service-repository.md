@@ -10,7 +10,7 @@
 1. Controller, Service, Repository 3계층 아키텍처를 이해한다
 2. 각 계층의 역할과 책임을 명확히 구분할 수 있다
 3. 왜 계층을 분리하는지 (테스트 용이, 교체 용이, 관심사 분리) 설명할 수 있다
-4. `ConcurrentHashMap` + `AtomicLong`을 사용한 인메모리 저장소를 구현할 수 있다
+4. `ConcurrentHashMap`(여러 요청이 동시에 와도 안전하게 데이터를 저장하는 Map) + `AtomicLong`(동시 요청에도 안전하게 숫자를 증가시키는 도구)을 사용한 인메모리 저장소를 구현할 수 있다
 
 ---
 
@@ -59,7 +59,7 @@ UserRepository (인터페이스)
   └── JpaUserRepository      (JPA - 나중에)
 ```
 
-Service는 `UserRepository` 인터페이스에만 의존하므로, 구현체가 바뀌어도 Service 코드는 수정할 필요가 없다. 이것이 **의존성 역전 원칙 (DIP)** 이다.
+Service는 `UserRepository` 인터페이스에만 의존하므로, 구현체가 바뀌어도 Service 코드는 수정할 필요가 없다. 이것이 **DI(Dependency Injection, 의존성 주입)** 를 통한 **의존성 역전 원칙**이다.
 
 ---
 
@@ -108,6 +108,8 @@ import java.util.List;
 import java.util.Optional;
 
 // 데이터 접근 계약: "무엇을 할 수 있는가"만 정의
+// > 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+// Optional: 값이 있을 수도 있고 없을 수도 있는 컨테이너
 // 구현 방법(메모리, DB, 파일 등)은 구현체가 결정
 public interface UserRepository {
     List<User> findAll();
@@ -186,6 +188,8 @@ public class MemoryUserRepository implements UserRepository {
 
     @Override
     public List<User> findByNameContaining(String name) {
+        // > 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+        // stream(): 컬렉션의 요소를 하나씩 처리하는 Java Stream API
         return store.values().stream()
                 .filter(u -> u.name().contains(name))
                 .toList();
@@ -344,8 +348,9 @@ git diff layered/service-repository-practice..layered/service-repository
 ```bash
 # 서버 실행
 ./gradlew bootRun
+# Windows: gradlew.bat bootRun
 
-# 유저 목록 조회
+# 유저 목록 조회 (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl http://localhost:8080/users
 
 # 유저 생성

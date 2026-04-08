@@ -79,7 +79,8 @@ public class InvalidRequestException extends RuntimeException {
 ```
 
 > **왜 `RuntimeException`을 상속하는가?**
-> - `RuntimeException`은 **Unchecked Exception**이다.
+> - `RuntimeException`은 **Unchecked Exception**이다 (RuntimeException은 실행 중 발생하는 예외로, try-catch를 강제하지 않는다).
+> - 반면 **Checked Exception** (예: `IOException`)은 반드시 try-catch로 처리하거나 `throws`로 선언해야 한다.
 > - `throws` 선언 없이 어디서든 던질 수 있어 코드가 깔끔하다.
 > - Spring의 `@ExceptionHandler`가 자동으로 잡아준다.
 
@@ -217,12 +218,15 @@ public User getUserDetail(@PathVariable Long id) {
 }
 ```
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+> 아래 코드의 `.map()`, `.orElseThrow()`는 Optional과 람다(Lambda) 문법이다. 지금은 "값이 없으면 예외를 던진다"는 흐름만 이해하면 된다.
+
 ```java
 // Service에서 예외를 던짐
 public User getUserById(Long id) {
-    return userRepository.findById(id)
-            .map(this::toDto)
-            .orElseThrow(() -> new UserNotFoundException(id));
+    return userRepository.findById(id)       // Optional<User>를 반환
+            .map(this::toDto)                // 값이 있으면 변환
+            .orElseThrow(() -> new UserNotFoundException(id));  // 값이 없으면 예외 발생
 }
 
 public User getUserDetail(Long id) {
@@ -275,6 +279,15 @@ git checkout web/exception-practice
 서버를 실행한 후:
 
 ```bash
+# 서버 실행
+# macOS / Linux
+./gradlew bootRun
+
+# Windows (cmd / PowerShell)
+gradlew.bat bootRun
+```
+
+```bash
 # 존재하지 않는 유저 조회 → 404
 curl -s http://localhost:8080/users/999 | python3 -m json.tool
 
@@ -284,6 +297,8 @@ curl -s http://localhost:8080/users/-1/detail | python3 -m json.tool
 # 정상 조회
 curl -s http://localhost:8080/users/1 | python3 -m json.tool
 ```
+
+> (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 
 ### 4. 완성 코드 확인
 

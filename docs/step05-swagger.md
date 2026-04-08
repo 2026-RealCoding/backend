@@ -33,7 +33,7 @@
 
 | 용어 | 설명 |
 |---|---|
-| **OpenAPI** | REST API를 기술하는 표준 명세 (specification) |
+| **OpenAPI** | REST API의 구조를 설명하는 국제 표준 형식 (어떤 URL이 있고, 어떤 파라미터를 받고, 어떤 응답을 주는지를 정해진 형식으로 기술) |
 | **Swagger** | OpenAPI 명세를 기반으로 한 도구 모음 (UI, 코드 생성 등) |
 | **Swagger UI** | OpenAPI 명세를 웹 브라우저에서 시각적으로 보여주는 도구 |
 | **springdoc-openapi** | Spring Boot 프로젝트에서 OpenAPI 명세를 자동 생성하는 라이브러리 |
@@ -120,6 +120,8 @@ public class UserController {
     }
 
     @Operation(summary = "유저 수정", description = "기존 유저 정보를 수정합니다")
+    // 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다.
+    // @ApiResponses({ ... }) 안의 중괄호는 Java 배열 문법으로, 여러 개의 @ApiResponse를 묶는 것이다.
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "수정 성공"),
             @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없음")
@@ -229,7 +231,11 @@ public class UserController {
 
 ### 확인 방법
 
-1. `./gradlew bootRun`으로 실행한다.
+1. 서버를 실행한다:
+   ```bash
+   ./gradlew bootRun
+   # Windows: gradlew.bat bootRun
+   ```
 2. `http://localhost:8080/swagger-ui/index.html` 접속한다.
 3. 각 API에 summary, description, parameter 설명이 표시되는지 확인한다.
 4. "Try it out"으로 실제 API를 호출해본다.

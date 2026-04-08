@@ -272,7 +272,7 @@ public class UserEntity {
 public class UserEntity {
 
     @Id                                    // 2. @Id로 기본키 지정
-    @GeneratedValue(strategy = IDENTITY)   // 3. ID 자동 생성 전략
+    @GeneratedValue(strategy = IDENTITY)   // 3. 데이터베이스가 자동으로 ID 번호를 부여하는 전략
     private Long id;
 
     private String name;
@@ -346,6 +346,8 @@ public class UserService {
 
 ## @Transactional 이해하기
 
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. (@Transactional의 세부 동작)
+
 ```java
 @Service
 @Transactional(readOnly = true)  // 기본값: 조회 전용 (성능 최적화)
@@ -372,6 +374,10 @@ public class UserService {
 
 ## JPA 변경 감지 (Dirty Checking)
 
+Dirty Checking이란 JPA가 엔티티의 변경을 자동으로 감지하여 UPDATE 쿼리를 실행하는 기능이다.
+
+> 지금 이해하지 못해도 괜찮다. 나중에 다시 만나게 된다. (Dirty Checking, Lazy Loading)
+
 ```java
 @Transactional
 public User updateUser(Long id, User request) {
@@ -397,6 +403,7 @@ JPA가 Entity의 변경 사항을 **자동 감지**하여 UPDATE 쿼리를 실�
 
 ```properties
 # SQLite 파일 기반 DB
+# Windows에서도 동일 경로 사용 (Gradle이 자동 처리)
 spring.datasource.url=jdbc:sqlite:./data/app.db
 spring.datasource.driver-class-name=org.sqlite.JDBC
 
@@ -447,6 +454,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 ```bash
 git checkout layered/jpa-practice
+```
+
+**테스트:**
+```bash
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
+
+# (Windows에서는 Git Bash 또는 PowerShell에서 실행)
+curl http://localhost:8080/users
 ```
 
 **과제:**

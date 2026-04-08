@@ -46,6 +46,8 @@ curl http://localhost:8080/actuator/health
 # → {"status": "UP", "components": {...}}
 ```
 
+> (Windows에서는 Git Bash 또는 PowerShell에서 curl 명령을 실행)
+
 ---
 
 # 프로필별 노출 설정
@@ -150,9 +152,11 @@ public class UserHealthIndicator implements HealthIndicator {
 public class UserController {
     private final Counter userCreateCounter;
 
+    // MeterRegistry: Micrometer의 메트릭 등록소 — 모든 측정값을 관리하는 중앙 객체
     public UserController(UserService userService,
                           MeterRegistry meterRegistry) {
         this.userService = userService;
+        // Counter: 누적 카운트 메트릭 — 숫자가 계속 올라가기만 하는 측정값
         this.userCreateCounter = Counter
             .builder("user.created.count")
             .description("유저 생성 횟수")
@@ -174,7 +178,7 @@ public class UserController {
 # 메트릭 확인
 
 ```bash
-# 유저 생성
+# 유저 생성 (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 curl -X POST http://localhost:8080/users \
   -H "Content-Type: application/json" \
   -d '{"name":"홍길동","email":"hong@test.com"}'
@@ -251,8 +255,9 @@ git checkout web/metric-practice
 3. `UserHealthIndicator` 구현
 4. `UserController`에 Counter 추가
 
-**테스트:**
+**테스트:** (Windows에서는 Git Bash 또는 PowerShell에서 실행)
 ```bash
+# 서버 실행: ./gradlew bootRun (Windows: gradlew.bat bootRun)
 curl http://localhost:8080/actuator/health
 curl http://localhost:8080/actuator/metrics
 curl http://localhost:8080/actuator/metrics/user.created.count
