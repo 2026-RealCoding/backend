@@ -45,6 +45,105 @@ RestClient restClient = RestClient.builder()
 
 ---
 
+## 사전 준비: 네이버 API 키 발급 (1/3)
+
+https://developers.naver.com 접속 → 로그인 → **Application** → **애플리케이션 등록**
+
+바로 가기: https://developers.naver.com/apps/#/register
+
+| 항목 | 입력 값 |
+|------|---------|
+| 애플리케이션 이름 | `realcoding` |
+| **사용 API** | **`검색` 선택** ⚠️ 필수! |
+| 사용 환경 | `WEB 설정` |
+| 웹 서비스 URL | `http://localhost:8080` |
+
+> "사용 API"에서 반드시 **검색**을 선택해야 쇼핑 API 호출이 가능하다.
+> 잘못 선택하면 401/403 에러가 발생한다.
+
+---
+
+## 네이버 애플리케이션 등록 화면
+
+![네이버 개발자 센터 애플리케이션 등록 화면](images/naver-app-register.png)
+
+https://developers.naver.com/apps/#/register
+
+---
+
+## 사전 준비: 네이버 API 키 발급 (2/3)
+
+등록 완료 후 **내 애플리케이션** → 등록한 앱 클릭 → **개요** 탭
+
+- **Client ID**: 공개 식별자 (예: `abcd1234efgh5678`)
+- **Client Secret**: 비밀키 — **보기** 버튼을 눌러야 표시됨
+
+> **⚠️ 보안 주의**
+> - Client Secret은 **절대 공개 금지** (GitHub, 블로그, 스크린샷 X)
+> - 노출되면 즉시 **재발급** 버튼으로 새 키 발급
+> - 호출 한도: **일 25,000회 무료** (실습에 충분)
+
+---
+
+## 사전 준비: API 키 설정 (3/3) - 방법 A: `.env` 파일 (권장)
+
+> **복습:** Step 8에서 배운 `.env` 파일 패턴을 사용한다.
+
+**1단계:** `application.properties`에 이미 아래 설정이 있다.
+```properties
+spring.config.import=optional:file:.env[.properties]
+```
+
+**2단계:** `.env.example`을 복사해서 `.env` 생성
+```bash
+cp .env.example .env             # macOS / Linux / Git Bash
+copy .env.example .env            # Windows (cmd)
+```
+
+**3단계:** `.env` 파일을 열어 발급받은 값을 입력
+```properties
+# .env
+naver.client-id=발급받은_Client_ID
+naver.client-secret=발급받은_Client_Secret
+```
+
+**4단계:** 실행 → 끝!
+```bash
+./gradlew bootRun         # gradlew.bat bootRun (Windows)
+```
+
+> `.env`는 `.gitignore`에 등록되어 있어 **절대 Git에 커밋되지 않는다**.
+
+---
+
+## 사전 준비: API 키 설정 (3/3) - 방법 B: OS 환경변수
+
+`.env` 파일 대신 OS 환경변수로 설정할 수도 있다. (CI/CD, 서버 배포 시 유용)
+
+```bash
+# macOS / Linux
+export NAVER_CLIENT_ID=발급받은_ID
+export NAVER_CLIENT_SECRET=발급받은_Secret
+```
+
+```cmd
+:: Windows (cmd)
+set NAVER_CLIENT_ID=발급받은_ID
+set NAVER_CLIENT_SECRET=발급받은_Secret
+```
+
+```powershell
+# Windows (PowerShell)
+$env:NAVER_CLIENT_ID="발급받은_ID"
+$env:NAVER_CLIENT_SECRET="발급받은_Secret"
+```
+
+**IntelliJ 사용자:** `Run` → `Edit Configurations...` → **Environment variables** 필드에 등록
+
+> **우선순위:** `.env` < OS 환경변수 (둘 다 있으면 OS 환경변수가 이김)
+
+---
+
 ## 네이버 쇼핑 검색 API
 
 **엔드포인트**: `GET https://openapi.naver.com/v1/search/shop.json`

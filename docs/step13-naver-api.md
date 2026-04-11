@@ -299,9 +299,156 @@ naver.client-secret=${NAVER_CLIENT_SECRET:your-client-secret}
 
 ### 1. 네이버 개발자 센터에서 API 키 발급
 
+네이버 쇼핑 검색 API를 사용하려면 **네이버 개발자 센터**에서 애플리케이션을 등록하고 Client ID / Client Secret를 발급받아야 한다. 발급은 무료이며, 네이버 계정만 있으면 된다.
+
+#### 1-1. 네이버 개발자 센터 접속 및 로그인
+
 1. https://developers.naver.com 접속
-2. 애플리케이션 등록 → "검색" API 선택
-3. Client ID와 Client Secret 발급
+2. 우측 상단 **로그인** → 네이버 계정으로 로그인
+3. 상단 메뉴에서 **Application** → **애플리케이션 등록** 클릭
+   - 또는 바로 https://developers.naver.com/apps/#/register 접속
+
+#### 1-2. 애플리케이션 등록 정보 입력
+
+| 항목 | 입력 값 |
+|------|---------|
+| **애플리케이션 이름** | `2026-realcoding-backend` (원하는 이름) |
+| **사용 API** | `검색` 선택 (드롭다운에서) |
+| **비로그인 오픈 API 서비스 환경** | `WEB 설정` 선택 |
+| **웹 서비스 URL** | `http://localhost:8080` 입력 |
+
+> **"사용 API"**에서 반드시 **"검색"**을 선택해야 한다. 다른 API를 선택하면 쇼핑 검색 호출 시 401/403 에러가 발생한다.
+
+#### 1-3. 약관 동의 후 등록
+
+1. 약관 동의 체크
+2. **등록하기** 버튼 클릭
+3. 등록 완료 후 내 애플리케이션 목록으로 이동
+
+#### 1-4. Client ID / Client Secret 확인
+
+1. 방금 등록한 애플리케이션 이름 클릭
+2. **개요** 탭에서 다음을 확인할 수 있다:
+   - **Client ID**: 공개 식별자 (예: `abcd1234efgh5678`)
+   - **Client Secret**: 비밀키 — **보기** 버튼을 눌러야 표시된다
+
+> **중요:**
+> - **Client Secret는 절대 공개되면 안 된다.** GitHub, 블로그, 스크린샷 등에 노출되지 않도록 주의하자.
+> - 실수로 노출한 경우 즉시 **재발급** 버튼을 눌러 새 키를 발급받자.
+> - 본 강의에서는 환경변수로 관리하여 소스코드에 직접 넣지 않는다.
+
+#### 1-5. 호출량 한도 (참고)
+
+- 검색 API는 **일 25,000회**까지 무료 호출이 가능하다
+- 한도 초과 시 429 (Too Many Requests) 응답이 반환된다
+- 실습에는 충분한 한도이다
+
+#### 1-6. 발급받은 키 설정 — 두 가지 방법
+
+발급받은 키는 **소스코드나 `application.properties`에 직접 입력하지 말 것!** 대신 다음 두 방법 중 하나를 사용한다.
+
+> **복습:** Step 8에서 배운 `.env` 파일 방식과 Step 1에서 배운 OS 환경변수 방식이다. 둘 다 민감 정보를 코드에서 분리하여 Git 유출을 방지하는 방법이다.
+
+##### 방법 A: `.env` 파일 사용 (권장, 편리함)
+
+**`application.properties`에 다음이 이미 있는지 확인:**
+
+```properties
+spring.config.import=optional:file:.env[.properties]
+```
+
+**프로젝트 루트의 `.env.example`을 복사하여 `.env` 파일 생성:**
+
+```bash
+# macOS / Linux / Git Bash
+cp .env.example .env
+
+# Windows (cmd)
+copy .env.example .env
+```
+
+**`.env` 파일을 열어 본인 값으로 채운다:**
+
+```properties
+# .env
+naver.client-id=발급받은_Client_ID
+naver.client-secret=발급받은_Client_Secret
+```
+
+**실행:**
+
+```bash
+./gradlew bootRun
+# Windows: gradlew.bat bootRun
+```
+
+> **장점:**
+> - 매번 환경변수를 설정할 필요가 없다 (파일로 저장됨)
+> - IntelliJ, 터미널 어디서 실행해도 동일하게 동작한다
+> - `.gitignore`에 등록되어 있어 Git 유출 위험이 없다
+
+##### 방법 B: OS 환경변수 사용 (CI/CD, 서버 배포에 적합)
+
+```bash
+# macOS / Linux
+export NAVER_CLIENT_ID=발급받은_Client_ID
+export NAVER_CLIENT_SECRET=발급받은_Client_Secret
+```
+
+```cmd
+:: Windows (cmd)
+set NAVER_CLIENT_ID=발급받은_Client_ID
+set NAVER_CLIENT_SECRET=발급받은_Client_Secret
+```
+
+```powershell
+# Windows (PowerShell)
+$env:NAVER_CLIENT_ID="발급받은_Client_ID"
+$env:NAVER_CLIENT_SECRET="발급받은_Client_Secret"
+```
+
+> **주의:** cmd/PowerShell에서 `set`/`$env:`은 **현재 세션에만 적용**된다. 터미널을 닫으면 사라진다. 영구 저장하려면 **시스템 환경 변수**에 등록해야 한다.
+
+##### 두 방법의 우선순위
+
+`application.properties`의 값은 다음 순서로 덮어써진다 (나중이 더 강함):
+
+1. `application.properties` 기본값 (`your-client-id`)
+2. `.env` 파일 값
+3. OS 환경변수 (`NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`)
+
+> 즉, `.env`와 OS 환경변수가 동시에 있으면 **OS 환경변수가 이긴다**.
+
+```bash
+# macOS / Linux (.zshrc 또는 .bashrc에 추가하면 영구 저장)
+export NAVER_CLIENT_ID=발급받은_Client_ID
+export NAVER_CLIENT_SECRET=발급받은_Client_Secret
+```
+
+```cmd
+:: Windows (cmd) - 현재 세션에만 적용
+set NAVER_CLIENT_ID=발급받은_Client_ID
+set NAVER_CLIENT_SECRET=발급받은_Client_Secret
+```
+
+```powershell
+# Windows (PowerShell) - 현재 세션에만 적용
+$env:NAVER_CLIENT_ID="발급받은_Client_ID"
+$env:NAVER_CLIENT_SECRET="발급받은_Client_Secret"
+```
+
+> **영구 저장 팁 (Windows):** `Windows키 + R` → `sysdm.cpl` → **고급 탭** → **환경 변수** → **사용자 변수 새로 만들기**에서 `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`을 등록하면 재부팅 후에도 유지된다.
+
+#### 1-7. IntelliJ에서 실행할 때 환경변수 설정
+
+터미널이 아닌 IntelliJ의 **Run** 버튼으로 실행한다면 환경변수를 별도로 등록해야 한다:
+
+1. 상단 툴바 → **BackendApplication** 드롭다운 → **Edit Configurations...**
+2. **Environment variables** 필드 우측 아이콘 클릭
+3. 다음을 추가:
+   - `NAVER_CLIENT_ID` = `발급받은_Client_ID`
+   - `NAVER_CLIENT_SECRET` = `발급받은_Client_Secret`
+4. **OK** → 이후 Run 시 자동 적용됨
 
 ### 2. practice 브랜치로 전환
 

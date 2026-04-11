@@ -42,4 +42,7 @@ logs/
 ### SQLite DB ###
 data/
 
-.env.dev
+### 환경변수 파일 (민감 정보 포함) ###
+.env
+.env.*
+!.env.example

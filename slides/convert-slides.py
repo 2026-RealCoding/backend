@@ -8,9 +8,12 @@ Features: progress bar, prev/next nav, index link, keyboard shortcut hint
 import glob
 import os
 import re
+import shutil
 
 SLIDES_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(SLIDES_DIR, "html")
+IMAGES_SRC = os.path.join(SLIDES_DIR, "images")
+IMAGES_DST = os.path.join(OUTPUT_DIR, "images")
 
 # Step number → branch name mapping
 STEP_BRANCHES = {
@@ -76,6 +79,14 @@ HTML_TEMPLATE = """\
   .reveal h3 {{
     font-size: 1.05em;
     color: var(--accent-dark);
+  }}
+
+  /* Images */
+  .reveal img {{
+    max-height: 460px;
+    max-width: 90%;
+    border-radius: 6px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
   }}
 
   /* Code blocks */
@@ -485,6 +496,14 @@ def generate_index(files: list[tuple[str, str, str]]) -> str:
 
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    # Copy images directory to output if it exists
+    if os.path.isdir(IMAGES_SRC):
+        if os.path.isdir(IMAGES_DST):
+            shutil.rmtree(IMAGES_DST)
+        shutil.copytree(IMAGES_SRC, IMAGES_DST)
+        image_count = len(os.listdir(IMAGES_DST))
+        print(f"  images/ copied ({image_count} file(s))")
 
     md_files = sorted(glob.glob(os.path.join(SLIDES_DIR, "step*.md")))
 

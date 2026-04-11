@@ -42,6 +42,14 @@
     color: var(--accent-dark);
   }
 
+  /* Images */
+  .reveal img {
+    max-height: 460px;
+    max-width: 90%;
+    border-radius: 6px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+
   /* Code blocks */
   .reveal pre {
     font-size: 0.65em;
@@ -247,6 +255,9 @@ spring.application.name=backend
 
 # 기본 프로필: dev
 spring.profiles.active=dev
+
+# .env 파일에서 민감 정보 로드 (없으면 무시)
+spring.config.import=optional:file:.env[.properties]
 ```
 
 프로필 전환 방법:
@@ -255,21 +266,61 @@ spring.profiles.active=dev
 spring.profiles.active=dev
 
 # 2. 실행 인자로 전달
-# macOS / Linux
 ./gradlew bootRun --args='--spring.profiles.active=prod'
-# Windows (cmd)
-gradlew.bat bootRun --args="--spring.profiles.active=prod"
-# Windows (PowerShell)
-gradlew.bat bootRun --args='--spring.profiles.active=prod'
+gradlew.bat bootRun --args="--spring.profiles.active=prod"  # Windows
 
 # 3. 환경 변수
-# macOS / Linux
-export SPRING_PROFILES_ACTIVE=prod
-# Windows (cmd)
-set SPRING_PROFILES_ACTIVE=prod
-# Windows (PowerShell)
-$env:SPRING_PROFILES_ACTIVE="prod"
+export SPRING_PROFILES_ACTIVE=prod    # macOS / Linux
+set SPRING_PROFILES_ACTIVE=prod        # Windows (cmd)
+$env:SPRING_PROFILES_ACTIVE="prod"     # Windows (PowerShell)
 ```
+
+---
+
+# .env 파일로 민감 정보 분리 (1/2)
+
+**문제:** API 키, 비밀번호 같은 민감 정보를 어떻게 관리하지?
+
+| 항목 | `application.properties` | `.env` |
+|------|--------------------------|--------|
+| **Git 커밋** | O (공개 OK) | **X (절대 금지)** |
+| **용도** | 공통 설정, 로직 | 민감 정보, 로컬 전용 |
+| **팀원 공유** | 그대로 공유 | `.env.example` 템플릿만 공유 |
+
+```properties
+# application.properties
+spring.config.import=optional:file:.env[.properties]
+```
+
+- `optional:` — 파일이 없어도 에러 없음
+- `[.properties]` — `.env`를 properties 형식으로 파싱
+
+---
+
+# .env 파일로 민감 정보 분리 (2/2)
+
+```
+프로젝트 루트/
+├── .env.example    ← Git 커밋 O (템플릿)
+├── .env            ← Git 커밋 X (실제 값)
+└── .gitignore      ← .env 제외
+```
+
+**작업 흐름:**
+```bash
+# 1. 템플릿 복사해서 .env 생성
+cp .env.example .env         # macOS / Linux / Git Bash
+copy .env.example .env        # Windows (cmd)
+
+# 2. .env 파일 열어 본인 값 채우기
+# naver.client-id=abcd1234efgh5678
+# naver.client-secret=ijkl9012mnop3456
+
+# 3. 실행하면 자동 로드됨
+./gradlew bootRun
+```
+
+> `.env.example`은 **"어떤 키가 필요한가"** 알려주는 체크리스트 역할!
 
 ---
 
