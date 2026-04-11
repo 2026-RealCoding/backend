@@ -1,18 +1,6 @@
 # 1주차 퀴즈: 환경설정, 프로젝트 시작, GET API
 
-## Q1. Spring Boot 프로젝트에서 사용하는 Java 최소 요구 버전과 본 강의에서 실제 사용하는 버전의 조합으로 올바른 것은?
-- A) 최소 Java 11, 사용 버전 Java 17
-- B) 최소 Java 17, 사용 버전 Java 21
-- C) 최소 Java 8, 사용 버전 Java 17
-- D) 최소 Java 21, 사용 버전 Java 21
-- E) 최소 Java 11, 사용 버전 Java 21
-
-**정답:** B
-**해설:** 강의에서 사용하는 Spring Boot는 Java 17 이상이 필요하며, 본 강의에서는 Java 21을 사용한다.
-
----
-
-## Q2. `@SpringBootApplication` 어노테이션이 내부적으로 포함하고 있지 않은 어노테이션은?
+## Q1. `@SpringBootApplication` 어노테이션이 내부적으로 포함하고 있지 않은 어노테이션은?
 - A) `@SpringBootConfiguration`
 - B) `@EnableAutoConfiguration`
 - C) `@ComponentScan`
@@ -24,7 +12,7 @@
 
 ---
 
-## Q3. `build.gradle`의 `dependencies` 블록에서 `spring-boot-starter-web`을 추가하면 자동으로 포함되지 않는 것은?
+## Q2. `build.gradle`의 `dependencies` 블록에서 `spring-boot-starter-web`을 추가하면 자동으로 포함되지 않는 것은?
 - A) Spring MVC
 - B) 내장 톰캣 (Embedded Tomcat)
 - C) Jackson (JSON 처리)
@@ -36,7 +24,7 @@
 
 ---
 
-## Q4. Gradle Wrapper(`gradlew` / `gradlew.bat`)에 대한 설명으로 올바르지 않은 것은?
+## Q3. Gradle Wrapper(`gradlew` / `gradlew.bat`)에 대한 설명으로 올바르지 않은 것은?
 - A) Gradle을 직접 설치하지 않아도 빌드가 가능하다
 - B) 팀원 모두 동일한 Gradle 버전을 사용하도록 보장한다
 - C) Windows cmd에서는 `./gradlew` 대신 `gradlew.bat`을 사용해야 한다
@@ -48,7 +36,7 @@
 
 ---
 
-## Q5. Spring Boot의 기본 내장 웹 서버 포트 번호와, 이를 변경하기 위해 수정해야 하는 파일의 조합으로 올바른 것은?
+## Q4. Spring Boot의 기본 내장 웹 서버 포트 번호와, 이를 변경하기 위해 수정해야 하는 파일의 조합으로 올바른 것은?
 - A) 80 포트, `build.gradle`
 - B) 8080 포트, `application.properties`
 - C) 8080 포트, `settings.gradle`
@@ -60,7 +48,7 @@
 
 ---
 
-## Q6. `@RestController`에 대한 설명으로 올바른 것은?
+## Q5. `@RestController`에 대한 설명으로 올바른 것은?
 - A) `@Controller`와 완전히 동일한 기능을 한다
 - B) `@Controller` + `@ResponseBody`를 합친 것이다
 - C) 반환값이 HTML 템플릿 이름으로 해석된다
@@ -72,7 +60,7 @@
 
 ---
 
-## Q7. 다음 코드에서 `GET /users/search?name=홍길동` 요청을 처리하려면 빈칸에 들어갈 어노테이션은?
+## Q6. 다음 코드에서 `GET /users/search?name=홍길동` 요청을 처리하려면 빈칸에 들어갈 어노테이션은?
 
 ```java
 @GetMapping("/search")
@@ -92,7 +80,7 @@ public List<User> searchUsers(______ String name) {
 
 ---
 
-## Q8. 다음 코드의 실행 결과로 올바른 것은?
+## Q7. 다음 코드의 실행 결과로 올바른 것은?
 
 ```java
 @RestController
@@ -121,7 +109,7 @@ public class UserController {
 
 ---
 
-## Q9. Java의 `record`를 DTO로 사용하는 것에 대한 설명으로 올바르지 않은 것은?
+## Q8. Java의 `record`를 DTO로 사용하는 것에 대한 설명으로 올바르지 않은 것은?
 - A) `record`로 선언하면 `private final` 필드가 자동 생성된다
 - B) 생성자, getter, `equals()`, `hashCode()`, `toString()`이 자동 생성된다
 - C) `record`는 Java 16에서 도입되었다
@@ -133,7 +121,7 @@ public class UserController {
 
 ---
 
-## Q10. 같은 경로 `/pages/users`에서 HTML과 JSON을 구분하여 응답하기 위해 사용하는 `@GetMapping`의 속성은?
+## Q9. 같은 경로 `/pages/users`에서 HTML과 JSON을 구분하여 응답하기 위해 사용하는 `@GetMapping`의 속성은?
 
 ```java
 @GetMapping(value = "/users", ______ = MediaType.TEXT_HTML_VALUE)

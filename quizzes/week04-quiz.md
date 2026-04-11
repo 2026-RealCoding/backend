@@ -1,18 +1,6 @@
 # 4주차 퀴즈: 계층분리, 제네릭 Repository, JPA (Step 10-12)
 
-## Q1. 3계층 아키텍처에서 각 계층의 역할이 올바르게 연결된 것은?
-- A) Controller - 비즈니스 로직, Service - HTTP 처리, Repository - 데이터 접근
-- B) Controller - 데이터 접근, Service - HTTP 처리, Repository - 비즈니스 로직
-- C) Controller - HTTP 요청/응답, Service - 비즈니스 로직, Repository - 데이터 접근
-- D) Controller - HTTP 요청/응답, Service - 데이터 접근, Repository - 비즈니스 로직
-- E) Controller - 비즈니스 로직, Service - 데이터 접근, Repository - HTTP 처리
-
-**정답:** C
-**해설:** Controller는 HTTP 요청 수신과 응답 반환을 담당하고, Service는 비즈니스 로직(검증, 예외 처리, 로깅)을 담당하며, Repository는 데이터 저장/조회/수정/삭제(CRUD)를 담당한다.
-
----
-
-## Q2. 계층을 분리하지 않고 Controller 하나에 모든 로직을 넣었을 때 발생하는 문제로 **적절하지 않은** 것은?
+## Q1. 계층을 분리하지 않고 Controller 하나에 모든 로직을 넣었을 때 발생하는 문제로 **적절하지 않은** 것은?
 - A) HTTP 요청 없이 비즈니스 로직만 테스트하기 어렵다
 - B) 같은 로직을 다른 Controller에서 재사용하려면 복사해야 한다
 - C) 저장소를 바꾸면 Controller까지 수정해야 한다
@@ -24,7 +12,7 @@
 
 ---
 
-## Q3. 다음 코드에서 `UserService`가 `UserRepository` 인터페이스에 의존하는 이유로 가장 적절한 것은?
+## Q2. 다음 코드에서 `UserService`가 `UserRepository` 인터페이스에 의존하는 이유로 가장 적절한 것은?
 
 ```java
 @Service
@@ -47,7 +35,7 @@ public class UserService {
 
 ---
 
-## Q4. `MemoryUserRepository`에서 `ConcurrentHashMap`과 `AtomicLong`을 사용하는 이유는?
+## Q3. `MemoryUserRepository`에서 `ConcurrentHashMap`과 `AtomicLong`을 사용하는 이유는?
 - A) 일반 HashMap과 long보다 메모리를 적게 사용하기 때문이다
 - B) 여러 요청이 동시에 와도 안전하게 데이터를 저장하고 ID를 생성하기 위해서이다
 - C) Spring에서 `@Repository` 사용 시 필수로 요구하는 자료구조이기 때문이다
@@ -59,19 +47,7 @@ public class UserService {
 
 ---
 
-## Q5. 제네릭 `CrudRepository<T, ID>`에서 `T`와 `ID`의 의미로 올바른 것은?
-- A) T는 테이블 이름, ID는 인덱스 번호이다
-- B) T는 저장할 엔티티 타입, ID는 기본키 타입이다
-- C) T는 트랜잭션 타입, ID는 식별자 문자열이다
-- D) T는 스레드 타입, ID는 데이터베이스 연결 번호이다
-- E) T는 타임스탬프, ID는 고유 식별 코드이다
-
-**정답:** B
-**해설:** 제네릭에서 T는 엔티티 타입(User, Product 등), ID는 기본키 타입(Long, String, UUID 등)을 의미한다. 이를 통해 하나의 인터페이스로 모든 엔티티의 기본 CRUD를 정의할 수 있다.
-
----
-
-## Q6. 다음 코드에서 `UserRepository`가 `findByNameContaining`만 선언한 이유는?
+## Q4. 다음 코드에서 `UserRepository`가 `findByNameContaining`만 선언한 이유는?
 
 ```java
 public interface UserRepository extends CrudRepository<User, Long> {
@@ -89,7 +65,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 ---
 
-## Q7. JPA Entity에 `record` 대신 `class`를 사용해야 하는 이유로 올바른 것은?
+## Q5. JPA Entity에 `record` 대신 `class`를 사용해야 하는 이유로 올바른 것은?
 - A) record는 Java에서 deprecated 예정이기 때문이다
 - B) record는 불변(immutable)이라 setter가 없고, JPA가 필드를 변경하거나 기본 생성자로 객체를 생성할 수 없기 때문이다
 - C) record는 데이터베이스 연결을 지원하지 않기 때문이다
@@ -98,6 +74,30 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 **정답:** B
 **해설:** JPA는 기본 생성자로 빈 객체를 생성한 후 Reflection으로 필드를 설정하고, 변경 감지(Dirty Checking)를 수행한다. record는 불변이므로 setter가 없고 필드를 변경할 수 없어 JPA Entity로 사용할 수 없다.
+
+---
+
+## Q6. 3계층 아키텍처에서 각 계층의 역할이 올바르게 연결된 것은?
+- A) Controller - 비즈니스 로직, Service - HTTP 처리, Repository - 데이터 접근
+- B) Controller - 데이터 접근, Service - HTTP 처리, Repository - 비즈니스 로직
+- C) Controller - HTTP 요청/응답, Service - 비즈니스 로직, Repository - 데이터 접근
+- D) Controller - HTTP 요청/응답, Service - 데이터 접근, Repository - 비즈니스 로직
+- E) Controller - 비즈니스 로직, Service - 데이터 접근, Repository - HTTP 처리
+
+**정답:** C
+**해설:** Controller는 HTTP 요청 수신과 응답 반환을 담당하고, Service는 비즈니스 로직(검증, 예외 처리, 로깅)을 담당하며, Repository는 데이터 저장/조회/수정/삭제(CRUD)를 담당한다.
+
+---
+
+## Q7. 제네릭 `CrudRepository<T, ID>`에서 `T`와 `ID`의 의미로 올바른 것은?
+- A) T는 테이블 이름, ID는 인덱스 번호이다
+- B) T는 저장할 엔티티 타입, ID는 기본키 타입이다
+- C) T는 트랜잭션 타입, ID는 식별자 문자열이다
+- D) T는 스레드 타입, ID는 데이터베이스 연결 번호이다
+- E) T는 타임스탬프, ID는 고유 식별 코드이다
+
+**정답:** B
+**해설:** 제네릭에서 T는 엔티티 타입(User, Product 등), ID는 기본키 타입(Long, String, UUID 등)을 의미한다. 이를 통해 하나의 인터페이스로 모든 엔티티의 기본 CRUD를 정의할 수 있다.
 
 ---
 
@@ -163,3 +163,5 @@ spring.jpa.show-sql=true
 
 **정답:** B
 **해설:** `ddl-auto=update`는 엔티티 기반으로 테이블을 자동 생성하거나, 변경된 부분(새 컬럼 등)만 수정한다. 이는 개발(dev) 환경에서 사용하며, 운영(prod) 환경에서는 `validate`(검증만)를 사용한다.
+
+---
