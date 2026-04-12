@@ -165,10 +165,12 @@ HTML_TEMPLATE = """\
     opacity: 0.5;
   }}
 
-  /* Layout */
+  /* Layout - scrollable slides */
   .reveal .slides section {{
     text-align: left;
     padding: 20px 40px;
+    overflow-y: auto;
+    max-height: 100%;
   }}
   .reveal .slides section h1,
   .reveal .slides section h2 {{
@@ -273,6 +275,7 @@ HTML_TEMPLATE = """\
     height: 700,
     margin: 0.04,
     progress: true,
+    scrollActivationWidth: null,
     help: true,
     plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
   }});
