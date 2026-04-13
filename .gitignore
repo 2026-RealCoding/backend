@@ -40,6 +40,6 @@ out/
 logs/
 
 ### SQLite DB ###
-data/
+data/app.db
 
 .env.dev
